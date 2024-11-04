@@ -30,7 +30,7 @@ import com.example.tooltiptutorialapp.screens.home.navigateToHomeScreen
 import com.example.tooltiptutorialapp.screens.profile.navigateToProfileScreen
 import com.example.tooltiptutorialapp.screens.questions.navigateToQuestionsScreen
 import com.example.tooltiptutorialapp.screens.tools.navigateToToolsScreen
-import com.example.tooltiptutorialapp.ui.theme.SelectedIconColor
+import com.example.tooltiptutorialapp.ui.theme.SecondColor
 import com.example.tooltiptutorialapp.ui.theme.TooltipTutorialAppTheme
 import com.example.tooltiptutorialapp.util.utility_model.BottomNavigationItem
 
@@ -107,7 +107,7 @@ class MainActivity : ComponentActivity() {
                                             text = item.label,
                                             fontSize = 10.sp,
                                             fontWeight = if (selectedIndexItem == index) FontWeight.Bold else FontWeight.Normal,
-                                            color = if (selectedIndexItem == index) SelectedIconColor else Black
+                                            color = if (selectedIndexItem == index) SecondColor else Black
                                         )
                                     },
                                     icon = {
@@ -115,7 +115,7 @@ class MainActivity : ComponentActivity() {
                                             painter = if (selectedIndexItem == index) item.selectedIcon else item.unselectedIcon,
                                             contentDescription = item.label,
                                             modifier = Modifier.size(20.dp),
-                                            tint = if (selectedIndexItem == index) SelectedIconColor else Black
+                                            tint = if (selectedIndexItem == index) SecondColor else Black
                                         )
                                     }
                                 )
