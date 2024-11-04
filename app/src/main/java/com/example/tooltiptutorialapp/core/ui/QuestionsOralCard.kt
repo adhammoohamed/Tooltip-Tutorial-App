@@ -46,7 +46,7 @@ fun QuestionsOralCard(model: OralModel) {
                     elevation = CardDefaults.elevatedCardElevation(5.dp),
                     colors = CardDefaults.cardColors(containerColor = Color.LightGray)
                 ) {
-                    Text(modifier = Modifier.padding(8.dp), text = model.type, fontSize = 10.sp)
+                    Text(modifier = Modifier.padding(4.dp), text = model.type, fontSize = 8.sp)
                 }
 
                 Spacer(Modifier.width(6.dp))
@@ -55,7 +55,7 @@ fun QuestionsOralCard(model: OralModel) {
                     elevation = CardDefaults.elevatedCardElevation(5.dp),
                     colors = CardDefaults.cardColors(containerColor = Color.LightGray)
                 ) {
-                    Text(modifier = Modifier.padding(8.dp), text = "Tasks ${model.tasksNumber}", fontSize = 10.sp)
+                    Text(modifier = Modifier.padding(4.dp), text = "Tasks ${model.tasksNumber}", fontSize = 8.sp)
                 }
 
                 Spacer(Modifier.weight(1f))

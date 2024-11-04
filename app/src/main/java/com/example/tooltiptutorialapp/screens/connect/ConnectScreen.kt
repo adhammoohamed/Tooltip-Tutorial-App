@@ -20,7 +20,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -29,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -45,110 +45,99 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun ConnectScreen(modifier: Modifier) {
-    // Obtain the ViewModel for managing UI-related data
     val viewModel: ConnectScreenViewModel = viewModel()
+    val pages = listOf(stringResource(id = R.string.suggestions), stringResource(id = R.string.chat))
+    var selectedTabIndex by remember { mutableIntStateOf(0) }
 
-    // Define the tabs for navigation within the screen
-    val pages = listOf("Suggestions", "Chat")
-
-    // Initialize coroutine scope for handling asynchronous actions
-    val scope = rememberCoroutineScope()
-    var selectedTabIndex by remember { mutableIntStateOf(0) } // State variable to track the selected tab
-
-    // Main layout of the Connect screen using LazyColumn for scrolling content
     LazyColumn(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(16.dp)
+        modifier = modifier.fillMaxSize()
     ) {
-        // Header for the Connect screen
         item {
-            ScreenHeader("Connect")
+            ScreenHeader(stringResource(id = R.string.connect))
         }
 
-        // Tab layout for navigating between Suggestions and Chat
         item {
-            Column {
-                TabRow(
-                    selectedTabIndex = selectedTabIndex,
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    // Create tabs dynamically from the pages list
-                    pages.forEachIndexed { index, pageTitle ->
-                        Tab(
-                            modifier = Modifier
-                                .clip(MaterialTheme.shapes.large) // Rounded corners for tabs
-                                .zIndex(6f), // Bring tabs above other UI elements
-                            selectedContentColor = SecondColor,
-                            unselectedContentColor = Color.LightGray,
-                            text = {
-                                Text(
-                                    modifier = Modifier
-                                        .clip(RoundedCornerShape(5.dp))
-                                        .padding(horizontal = 5.dp, vertical = 10.dp),
-                                    text = pageTitle,
-                                    textAlign = TextAlign.Center,
-                                    fontWeight = FontWeight.Bold
-                                )
-                            },
-                            selected = selectedTabIndex == index, // Highlight the selected tab
-                            onClick = {
-                                scope.launch {
-                                    selectedTabIndex = index // Update the selected tab index
-                                }
-                            },
-                        )
-                    }
-                }
-            }
+            ConnectTabRow(
+                pages = pages,
+                selectedTabIndex = selectedTabIndex,
+                onTabSelected = { selectedTabIndex = it }
+            )
         }
 
-        // Content displayed based on the selected tab
         when (selectedTabIndex) {
-            0 -> { // Suggestions Tab
-                item {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                    ) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp)
-                        ) {
-                            SmallSectionTitle("Suggested Study Partners") // Title for the suggestions section
-                            Spacer(modifier = Modifier.weight(1f)) // Spacer for layout balance
-                            IconButton(
-                                modifier = Modifier.size(30.dp),
-                                onClick = {
-                                    // Handle filter button click
-                                }
-                            ) {
-                                Icon(
-                                    painter = painterResource(R.drawable.ic_menu),
-                                    contentDescription = "Filter", // Icon description for accessibility
-                                    tint = SecondColor
-                                )
-                            }
-                        }
-                    }
-                }
+            0 -> item { SuggestionsTab() }
+            1 -> item{ ChatTab() }
+        }
+    }
+}
 
-                // List of suggested study partners displayed as cards
-                items(studyPartnerList) {
-                    SuggestionCard(it) // Display each study partner as a suggestion card
-                }
-            }
+@Composable
+fun ConnectTabRow(
+    pages: List<String>,
+    selectedTabIndex: Int,
+    onTabSelected: (Int) -> Unit
+) {
+    TabRow(
+        selectedTabIndex = selectedTabIndex,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        pages.forEachIndexed { index, pageTitle ->
+            Tab(
+                modifier = Modifier.clip(MaterialTheme.shapes.large),
+                selectedContentColor = SecondColor,
+                unselectedContentColor = Color.LightGray,
+                text = {
+                    Text(
+                        text = pageTitle,
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier
+                            .padding(horizontal = 8.dp, vertical = 10.dp)
+                            .clip(RoundedCornerShape(5.dp))
+                    )
+                },
+                selected = selectedTabIndex == index,
+                onClick = { onTabSelected(index) }
+            )
+        }
+    }
+}
 
-            1 -> { // Chat Tab
-                item {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center // Center chat content
-                    ) {
-                        Text("Chat Content Here") // Placeholder for chat content
-                    }
-                }
+@Composable
+fun SuggestionsTab() {
+    Column(modifier = Modifier.padding(16.dp)) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            SmallSectionTitle(stringResource(id = R.string.suggested_study_partners))
+            Spacer(modifier = Modifier.weight(1f))
+            IconButton(
+                modifier = Modifier.size(30.dp),
+                onClick = { /* Handle filter click */ }
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_menu),
+                    contentDescription = "",
+                    tint = SecondColor
+                )
             }
         }
+
+        studyPartnerList.forEach {
+            SuggestionCard(it)
+        }
+    }
+}
+
+@Composable
+fun ChatTab() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(stringResource(id = R.string.chat_content_placeholder))
     }
 }

@@ -16,8 +16,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.tooltiptutorialapp.R
 import com.example.tooltiptutorialapp.TooltipTutorialApp
 import com.example.tooltiptutorialapp.core.ui.OnboardingOverlay
 import com.example.tooltiptutorialapp.core.ui.ScreenHeader
@@ -29,7 +31,6 @@ import com.example.tooltiptutorialapp.util.utility_model.unitList
 
 @Composable
 fun HomeScreen(modifier: Modifier) {
-
     val sharedPreferencesManager =
         (LocalContext.current.applicationContext as TooltipTutorialApp).sharedPreferencesManager
 
@@ -37,35 +38,41 @@ fun HomeScreen(modifier: Modifier) {
 
     Box(modifier = modifier.fillMaxSize()) {
         LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp)
+            modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp)
         ) {
+            // Header with notification icon
             item {
-                Row(modifier = Modifier.fillMaxWidth()) {
-                    ScreenHeader("Home")
-                    Spacer(modifier = Modifier.weight(1f))
-                    Icon(
-                        modifier = Modifier.size(30.dp),
-                        imageVector = Icons.Outlined.Notifications,
-                        contentDescription = "Notifications",
-                        tint = SecondColor
-                    )
-                }
-
-                Username("User Name")
-
+                UserHeader()
+                Username(stringResource(id = R.string.user_name))
                 Spacer(Modifier.height(16.dp))
-
-                SectionTitle("Study Plan")
+                SectionTitle(stringResource(id = R.string.study_plan))
             }
+
+            // List of study units
             itemsIndexed(unitList) { index, unit ->
                 UnitCircleView(unit, index, unitList.size)
             }
         }
 
+        // Onboarding overlay if applicable
         if (viewModel.isOverlayVisible) {
             OnboardingOverlay { viewModel.hideOverlay() }
         }
     }
 }
+
+@Composable
+fun UserHeader() {
+    Row(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+        ScreenHeader(stringResource(id = R.string.home))
+        Spacer(modifier = Modifier.weight(1f))
+        Icon(
+            modifier = Modifier.size(30.dp),
+            imageVector = Icons.Outlined.Notifications,
+            contentDescription = "",
+            tint = SecondColor,
+        )
+    }
+}
+
+

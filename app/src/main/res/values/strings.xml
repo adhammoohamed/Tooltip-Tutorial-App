@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Tooltip Tutorial App</string>
+    <string name="user_name">User Name</string>
+    <string name="study_plan">Study Plan</string>
+    <string name="home">Home</string>
+    <string name="suggestions">Suggestions</string>
+    <string name="chat">Chat</string>
+    <string name="connect">Connect</string>
+    <string name="suggested_study_partners">Suggested Study Partners</string>
+    <string name="chat_content_placeholder">Chat Content Placeholder</string>
 </resources>

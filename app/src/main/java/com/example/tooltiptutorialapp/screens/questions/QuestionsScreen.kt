@@ -1,6 +1,6 @@
 package com.example.tooltiptutorialapp.screens.questions
 
-import android.util.Log
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -17,8 +17,6 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Create
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -39,7 +37,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tooltiptutorialapp.R
 import com.example.tooltiptutorialapp.core.ui.QuestionWritingModel
@@ -52,16 +49,18 @@ import com.example.tooltiptutorialapp.util.utility_model.oralModels
 import com.example.tooltiptutorialapp.util.utility_model.writingModels
 
 @Composable
-fun QuestionsScreen(modifier: Modifier) {
-    val viewModel: QuestionsViewModel = viewModel()
-    val pages = listOf("Writing 1", "Oral")
-    val icons = listOf(R.drawable.ic_pen, R.drawable.ic_microphone)
+fun QuestionsScreen(
+    modifier: Modifier,
+    viewModel: QuestionsViewModel = viewModel() // Dependency injection for ViewModel
+) {
+    val tabTitles = listOf("Writing 1", "Oral")
+    val tabIcons = listOf(R.drawable.ic_pen, R.drawable.ic_microphone)
     var selectedTabIndex by remember { mutableIntStateOf(0) }
 
     Column(
         modifier = modifier
+            .padding(16.dp)
             .wrapContentSize()
-            .padding(16.dp),
     ) {
         ScreenHeader("Questions")
 
@@ -71,74 +70,40 @@ fun QuestionsScreen(modifier: Modifier) {
                 .width(300.dp)
                 .padding(horizontal = 16.dp),
         ) {
-            pages.forEachIndexed { index, pageTitle ->
-                Tab(
-                    modifier = Modifier
-                        .clip(MaterialTheme.shapes.large)
-                        .zIndex(6f),
-                    selectedContentColor = SecondColor,
-                    unselectedContentColor = Color.LightGray,
-                    text = {
-                        Row {
-                            Icon(
-                                modifier = Modifier
-                                    .size(15.dp)
-                                    .align(Alignment.CenterVertically),
-                                painter = painterResource(icons[index]),
-                                contentDescription = null,
-                            )
-                            Spacer(Modifier.width(4.dp))
-                            Text(
-                                modifier = Modifier
-                                    .clip(RoundedCornerShape(5.dp))
-                                    .padding(horizontal = 5.dp, vertical = 10.dp),
-                                text = pageTitle,
-                                textAlign = TextAlign.Center,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                    },
-                    selected = selectedTabIndex == index,
-                    onClick = {
-                        selectedTabIndex = index
-                    },
+            tabTitles.forEachIndexed { index, title ->
+                TabWithIcon(
+                    icon = tabIcons[index],
+                    title = title,
+                    isSelected = selectedTabIndex == index,
+                    onClick = { selectedTabIndex = index }
                 )
             }
         }
 
         Button(
-            modifier = Modifier.padding(top = 16.dp , start = 16.dp),
-            onClick = { /* Add button action here */ },
+            modifier = Modifier.padding(top = 16.dp),
+            onClick = { /* Handle filter action */ },
             shape = RoundedCornerShape(4.dp),
             colors = ButtonDefaults.buttonColors(containerColor = TransparentSecondColor)
         ) {
             Row {
                 Text(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(5.dp))
-                        .padding(horizontal = 5.dp, vertical = 10.dp),
                     text = "Filter",
                     textAlign = TextAlign.Center,
-                    color = ThirdColor
+                    color = ThirdColor,
+                    modifier = Modifier.padding(horizontal = 5.dp, vertical = 10.dp)
                 )
                 Spacer(Modifier.width(4.dp))
                 Icon(
-                    modifier = Modifier
-                        .size(15.dp)
-                        .align(Alignment.CenterVertically),
                     painter = painterResource(R.drawable.ic_menu),
                     contentDescription = "Filter",
-                    tint = Color.Black
+                    tint = Color.Black,
+                    modifier = Modifier.size(15.dp)
                 )
             }
         }
 
-        // Content area below the button with LazyGrid and LazyColumn based on the selected tab
-        if (selectedTabIndex == 0) {
-            Log.d("QuestionsScreen", "LazyVerticalGrid is being displayed")
-            Log.d("QuestionsScreen", writingModels.size.toString())
-            Log.d("QuestionsScreen", writingModels.toString())
-
+        AnimatedVisibility(visible = selectedTabIndex == 0) {
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
                 contentPadding = PaddingValues(16.dp),
@@ -150,14 +115,13 @@ fun QuestionsScreen(modifier: Modifier) {
                     QuestionWritingModel(model)
                 }
             }
-        } else {
-            // Oral tab - LazyColumn
+        }
+
+        AnimatedVisibility(visible = selectedTabIndex == 1) {
             LazyColumn(
                 contentPadding = PaddingValues(16.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
-
-
                 items(oralModels) {
                     QuestionsOralCard(it)
                 }
@@ -165,4 +129,39 @@ fun QuestionsScreen(modifier: Modifier) {
         }
     }
 }
+
+@Composable
+fun TabWithIcon(
+    icon: Int,
+    title: String,
+    isSelected: Boolean,
+    onClick: () -> Unit
+) {
+    Tab(
+        selected = isSelected,
+        onClick = onClick,
+        selectedContentColor = SecondColor,
+        unselectedContentColor = Color.LightGray,
+        modifier = Modifier.clip(MaterialTheme.shapes.large)
+    ) {
+        Row {
+            Icon(
+                painter = painterResource(icon),
+                contentDescription = null,
+                modifier = Modifier
+                    .size(15.dp)
+                    .align(Alignment.CenterVertically)
+            )
+            Spacer(Modifier.width(4.dp))
+            Text(
+                text = title,
+                textAlign = TextAlign.Center,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(horizontal = 5.dp, vertical = 10.dp)
+            )
+        }
+    }
+}
+
+
 
