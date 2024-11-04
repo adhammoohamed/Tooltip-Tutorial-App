@@ -43,7 +43,7 @@ fun UnitCircleView(unitItem: UnitItem, index: Int, unitListSize: Int) {
     if (index < unitListSize - 1) {
         Canvas(
             modifier = Modifier
-                .width(100.dp)
+                .width(131.dp)
                 .height(50.dp)
                 .padding(vertical = 4.dp)
         ) {
@@ -71,7 +71,7 @@ fun UnitItem(
     val strokeColor = if (isActive) SecondColor else Color.LightGray
     val textColor = if (isActive) SecondColor else Color.Gray
 
-    Row(verticalAlignment = Alignment.CenterVertically) {
+    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(horizontal = 16.dp)) {
 
         Box(
             contentAlignment = Alignment.Center,

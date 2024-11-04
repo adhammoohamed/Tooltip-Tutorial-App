@@ -15,26 +15,32 @@ import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.tooltiptutorialapp.TooltipTutorialApp
 import com.example.tooltiptutorialapp.core.ui.OnboardingOverlay
 import com.example.tooltiptutorialapp.core.ui.ScreenHeader
 import com.example.tooltiptutorialapp.core.ui.SectionTitle
 import com.example.tooltiptutorialapp.core.ui.UnitCircleView
 import com.example.tooltiptutorialapp.core.ui.Username
 import com.example.tooltiptutorialapp.ui.theme.SecondColor
-import com.example.tooltiptutorialapp.util.utility_model.populateUnitList
 import com.example.tooltiptutorialapp.util.utility_model.unitList
 
 @Composable
 fun HomeScreen(modifier: Modifier) {
-    val viewModel: HomeScreenViewModel = viewModel()
-    populateUnitList()
+
+    val sharedPreferencesManager =
+        (LocalContext.current.applicationContext as TooltipTutorialApp).sharedPreferencesManager
+
+    val viewModel: HomeScreenViewModel = viewModel { HomeScreenViewModel(sharedPreferencesManager) }
 
     Box(modifier = modifier.fillMaxSize()) {
-        LazyColumn(modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+        ) {
             item {
                 Row(modifier = Modifier.fillMaxWidth()) {
                     ScreenHeader("Home")
