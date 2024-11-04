@@ -6,5 +6,5 @@ data class BottomNavigationItem(
     val label: String,
     val selectedIcon: Painter,
     val unselectedIcon: Painter,
-    val route: String
+    val navigate: () -> Unit
 )

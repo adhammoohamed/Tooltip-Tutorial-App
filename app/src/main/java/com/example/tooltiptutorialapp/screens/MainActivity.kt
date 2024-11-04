@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -19,12 +18,18 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.Black
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.compose.rememberNavController
 import com.example.tooltiptutorialapp.R
+import com.example.tooltiptutorialapp.navigation.TooltipTutorialNavGraph
+import com.example.tooltiptutorialapp.screens.connect.navigateToConnectScreen
+import com.example.tooltiptutorialapp.screens.home.navigateToHomeScreen
+import com.example.tooltiptutorialapp.screens.profile.navigateToProfileScreen
+import com.example.tooltiptutorialapp.screens.questions.navigateToQuestionsScreen
+import com.example.tooltiptutorialapp.screens.tools.navigateToToolsScreen
 import com.example.tooltiptutorialapp.ui.theme.SelectedIconColor
 import com.example.tooltiptutorialapp.ui.theme.TooltipTutorialAppTheme
 import com.example.tooltiptutorialapp.util.utility_model.BottomNavigationItem
@@ -35,37 +40,48 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+
+            val navController = rememberNavController()
+
             TooltipTutorialAppTheme {
                 val bottomNavigationItems = listOf(
                     BottomNavigationItem(
                         label = "Home",
                         selectedIcon = painterResource(id = R.drawable.ic_selected_home),
                         unselectedIcon = painterResource(id = R.drawable.ic_unselected_home),
-                        route = "home"
+                        navigate = { navController.navigateToHomeScreen() }
                     ),
                     BottomNavigationItem(
                         label = "Connect",
                         selectedIcon = painterResource(id = R.drawable.ic_selected_connect),
                         unselectedIcon = painterResource(id = R.drawable.ic_unselected_connect),
-                        route = "home"
+                        navigate = {
+                            navController.navigateToConnectScreen()
+                        }
                     ),
                     BottomNavigationItem(
                         label = "Questions",
                         selectedIcon = painterResource(id = R.drawable.ic_selected_questions),
                         unselectedIcon = painterResource(id = R.drawable.ic_unselected_questions),
-                        route = "home"
+                        navigate = {
+                            navController.navigateToQuestionsScreen()
+                        }
                     ),
                     BottomNavigationItem(
                         label = "Tools",
                         selectedIcon = painterResource(id = R.drawable.ic_selected_tools),
                         unselectedIcon = painterResource(id = R.drawable.ic_unselected_tools),
-                        route = "home"
+                        navigate = {
+                            navController.navigateToToolsScreen()
+                        }
                     ),
                     BottomNavigationItem(
                         label = "Profile",
                         selectedIcon = painterResource(id = R.drawable.ic_selected_profile),
                         unselectedIcon = painterResource(id = R.drawable.ic_unselected_profile),
-                        route = "home"
+                        navigate = {
+                            navController.navigateToProfileScreen()
+                        }
                     )
 
                 )
@@ -84,6 +100,7 @@ class MainActivity : ComponentActivity() {
                                     selected = selectedIndexItem == index,
                                     onClick = {
                                         selectedIndexItem = index
+                                        item.navigate.invoke()
                                     },
                                     label = {
                                         Text(
@@ -107,13 +124,10 @@ class MainActivity : ComponentActivity() {
                     }
                 ) { innerPadding ->
 
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(innerPadding)
-                    ) {
-
-                    }
+                    TooltipTutorialNavGraph(
+                        navController,
+                        modifier = Modifier.padding(innerPadding)
+                    )
 
                 }
             }
