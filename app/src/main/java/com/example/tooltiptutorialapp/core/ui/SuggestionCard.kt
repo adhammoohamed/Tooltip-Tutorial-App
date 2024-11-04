@@ -107,8 +107,8 @@ fun SuggestionCard(item: StudyPartnerModel) {
                             Text(
                                 "Targeting: ${item.targetingLevel}",
                                 color = Color.White,
-                                fontSize = 12.sp,
-                                modifier = Modifier.padding(3.dp)
+                                fontSize = 8.sp,
+                                modifier = Modifier.padding(2.dp)
                             )
                         }
                     }

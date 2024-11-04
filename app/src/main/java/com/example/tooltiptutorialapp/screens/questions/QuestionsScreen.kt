@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -86,7 +87,7 @@ fun QuestionsScreen(
             shape = RoundedCornerShape(4.dp),
             colors = ButtonDefaults.buttonColors(containerColor = TransparentSecondColor)
         ) {
-            Row {
+            Row (modifier = Modifier.wrapContentSize()){
                 Text(
                     text = "Filter",
                     textAlign = TextAlign.Center,
@@ -98,7 +99,7 @@ fun QuestionsScreen(
                     painter = painterResource(R.drawable.ic_menu),
                     contentDescription = "Filter",
                     tint = Color.Black,
-                    modifier = Modifier.size(15.dp)
+                    modifier = Modifier.size(15.dp).align(Alignment.CenterVertically)
                 )
             }
         }

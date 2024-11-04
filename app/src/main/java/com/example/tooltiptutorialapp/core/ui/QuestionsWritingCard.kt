@@ -63,7 +63,7 @@ fun QuestionWritingModel(model: WritingModel) {
                     contentDescription = ""
                 )
 
-                Text(text = model.title, fontWeight = FontWeight.Bold, color = ThirdColor)
+                Text(text = model.title, fontWeight = FontWeight.Bold, color = ThirdColor, fontSize = 10.sp)
             }
 
             Text(modifier = Modifier.padding(8.dp), text = "Progress ${model.progress}%")
