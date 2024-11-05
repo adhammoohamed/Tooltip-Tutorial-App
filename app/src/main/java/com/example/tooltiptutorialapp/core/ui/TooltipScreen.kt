@@ -55,7 +55,8 @@ fun CustomFullScreenOverlayWithTooltip(
     tooltipText: String = "Default Tooltip Text",
     backgroundColor: Color = OnboardingOverlayColor,
     titleTextColor: Color = White,
-    bodyTextColor: Color = White
+    bodyTextColor: Color = White,
+    abovePercent: Float = 0.7f
 ) {
     val density = LocalDensity.current
 
@@ -75,6 +76,7 @@ fun CustomFullScreenOverlayWithTooltip(
             backgroundColor = backgroundColor,
             titleTextColor = titleTextColor,
             bodyTextColor = bodyTextColor,
+            abovePercent = abovePercent,
             offset = tooltipOffset
         ) { isDismissed ->
             if (isDismissed) {
@@ -124,6 +126,7 @@ fun RichTooltip(
     backgroundColor: Color,
     titleTextColor: Color,
     bodyTextColor: Color,
+    abovePercent: Float = 0.7f, // Adjust this value to control the position
     onTooltipDismissed: (Boolean) -> Unit // Callback for when the tooltip is dismissed
 ) {
     val tooltipState = rememberTooltipState(isPersistent = true)
@@ -146,7 +149,7 @@ fun RichTooltip(
     }
 
     TooltipBox(
-        positionProvider = CustomOffsetPositionProvider(offset.x.toInt(), offset.y.toInt()),
+        positionProvider = CustomOffsetPositionProvider(offset.x.toInt(), offset.y.toInt(), abovePercent = abovePercent),
         tooltip = {
             Card(
                 modifier = Modifier.padding(16.dp),
@@ -167,7 +170,8 @@ fun RichTooltip(
 
 class CustomOffsetPositionProvider(
     private val offsetX: Int,
-    private val offsetY: Int
+    private val offsetY: Int,
+    private val abovePercent: Float = 0.7f // Adjust this value to control the position
 ) : PopupPositionProvider {
     override fun calculatePosition(
         anchorBounds: IntRect,

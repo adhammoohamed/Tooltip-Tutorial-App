@@ -119,7 +119,8 @@ fun QuestionsScreen(
                         rectWidth = firstGridItemSize.width.toFloat(),
                         rectHeight = firstGridItemSize.height.toFloat(),
                         xOffset = firstGridItemOffset.x,
-                        yOffset = firstGridItemOffset.y
+                        yOffset = firstGridItemOffset.y,
+                        abovePercent = 0.4f
                     )
                 }
 
