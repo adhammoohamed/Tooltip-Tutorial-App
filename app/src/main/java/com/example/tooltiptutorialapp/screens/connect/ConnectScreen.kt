@@ -57,7 +57,6 @@ fun ConnectScreen(modifier: Modifier, navController: NavController, selectedInde
     BaseScreen(
         navController = navController,
         selectedIndex = selectedIndex,
-        onItemSelected = onItemSelected,
         overlayContent = {
             if (showOverLay && bottomNavBarGlobalOffsets.size > selectedIndex) {
                 CustomFullScreenOverlayWithTooltip(

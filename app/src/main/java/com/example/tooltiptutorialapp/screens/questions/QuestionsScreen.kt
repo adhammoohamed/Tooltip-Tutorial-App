@@ -85,7 +85,6 @@ fun QuestionsScreen(
     BaseScreen(
         navController = navController,
         selectedIndex = selectedIndex,
-        onItemSelected = onItemSelected,
         overlayContent = {
             when (currentOverlay) {
                 Overlay.FIRST -> {
@@ -105,10 +104,10 @@ fun QuestionsScreen(
                         onDismiss = {
                             currentOverlay = Overlay.THIRD
                         },
-                        rectWidth = buttonSize.width.toFloat(),
-                        rectHeight = buttonSize.height.toFloat(),
                         xOffset = buttonOffset.x,
                         yOffset = buttonOffset.y,
+                        rectWidth = buttonSize.width.toFloat(),
+                        rectHeight = buttonSize.height.toFloat(),
                         outerCornerRadius = 0.dp,
                         innerCornerRadius = 0.dp
                     )
@@ -119,10 +118,10 @@ fun QuestionsScreen(
                         onDismiss = {
                             currentOverlay = Overlay.NONE // Hide the overlay
                         },
-                        rectWidth = firstGridItemSize.width.toFloat(),
-                        rectHeight = firstGridItemSize.height.toFloat(),
                         xOffset = firstGridItemOffset.x,
                         yOffset = firstGridItemOffset.y,
+                        rectWidth = firstGridItemSize.width.toFloat(),
+                        rectHeight = firstGridItemSize.height.toFloat(),
                         abovePercent = 0.4f
                     )
                 }

@@ -56,7 +56,6 @@ fun HomeScreen(
     BaseScreen(
         navController = navController,
         selectedIndex = selectedIndex,
-        onItemSelected = onItemSelected,
         overlayContent = {
             if (showOnboardingOverlay) {
                 OnboardingOverlay {

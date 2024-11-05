@@ -49,7 +49,6 @@ val bottomNavBarGlobalSizes = mutableStateListOf<IntSize>()
 fun BaseScreen(
     navController: NavController,
     selectedIndex: Int,
-    onItemSelected: (Int, Offset) -> Unit,
     overlayContent: @Composable () -> Unit,
     content: @Composable () -> Unit
 ) {
@@ -68,7 +67,6 @@ fun BaseScreen(
             selectedIndex = selectedIndex,
             onItemSelected = { index, offset ->
                 currentOffset = offset
-                onItemSelected(index, offset)
             },
             navController = navController,
             modifier = Modifier.align(Alignment.BottomCenter),

@@ -24,7 +24,7 @@ fun OnboardingOverlay(onDismiss: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(OnboardingOverlayColor.copy(alpha = 0.7f)) // Semi-transparent gray color
+            .background(OnboardingOverlayColor.copy(alpha = 0.9f)) // Semi-transparent gray color
             .clickable { onDismiss() } // Dismiss overlay on tap
     ) {
         Column(

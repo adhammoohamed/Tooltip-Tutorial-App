@@ -5,17 +5,20 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
@@ -27,6 +30,7 @@ import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.clipPath
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
@@ -35,8 +39,8 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupPositionProvider
+import com.example.tooltiptutorialapp.core.ui.TextBubbleShape
 import com.example.tooltiptutorialapp.ui.theme.OnboardingOverlayColor
-import com.example.tooltiptutorialapp.ui.theme.ThirdColor
 import kotlinx.coroutines.launch
 
 @Composable
@@ -52,10 +56,8 @@ fun CustomFullScreenOverlayWithTooltip(
 
     // tooltip data
     tooltipTitle: String = "Default Tooltip Text",
-    tooltipText: String = "Default Tooltip Text",
     backgroundColor: Color = OnboardingOverlayColor,
     titleTextColor: Color = White,
-    bodyTextColor: Color = White,
     abovePercent: Float = 0.7f
 ) {
     val density = LocalDensity.current
@@ -71,13 +73,11 @@ fun CustomFullScreenOverlayWithTooltip(
     ) {
         // Tooltip overlay at calculated offset
         RichTooltip(
+            offset = tooltipOffset,
             tooltipTitle = tooltipTitle,
-            tooltipText = tooltipText,
             backgroundColor = backgroundColor,
             titleTextColor = titleTextColor,
-            bodyTextColor = bodyTextColor,
-            abovePercent = abovePercent,
-            offset = tooltipOffset
+            abovePercent = abovePercent
         ) { isDismissed ->
             if (isDismissed) {
                 onDismiss()
@@ -122,15 +122,14 @@ fun CustomFullScreenOverlayWithTooltip(
 fun RichTooltip(
     offset: Offset,
     tooltipTitle: String,
-    tooltipText: String,
     backgroundColor: Color,
     titleTextColor: Color,
-    bodyTextColor: Color,
-    abovePercent: Float = 0.7f, // Adjust this value to control the position
-    onTooltipDismissed: (Boolean) -> Unit // Callback for when the tooltip is dismissed
+    abovePercent: Float = 0.7f,
+    onTooltipDismissed: (Boolean) -> Unit // Callback for when the tooltip is dismissed){}){}
 ) {
     val tooltipState = rememberTooltipState(isPersistent = true)
     val scope = rememberCoroutineScope()
+    var tooltipSize by remember{ mutableStateOf(IntSize.Zero) }
 
     // Trigger the tooltip when the screen is first composed
     LaunchedEffect(Unit) {
@@ -149,23 +148,32 @@ fun RichTooltip(
     }
 
     TooltipBox(
-        positionProvider = CustomOffsetPositionProvider(offset.x.toInt(), offset.y.toInt(), abovePercent = abovePercent),
+        positionProvider = CustomOffsetPositionProvider(
+            offset.x.toInt(),
+            offset.y.toInt(),
+            abovePercent = abovePercent
+        ),
         tooltip = {
-            Card(
-                modifier = Modifier.padding(16.dp),
-                shape = RoundedCornerShape(8.dp),
-                colors = CardDefaults.cardColors(containerColor = backgroundColor)
+            Box(
+                modifier = Modifier
+                    .wrapContentSize()
+                    .onGloballyPositioned { layoutCoordinates ->
+                        tooltipSize = layoutCoordinates.size
+                    }
+                    .clip(TextBubbleShape())
+                    .background(color = backgroundColor),
             ) {
-                Column(modifier = Modifier.padding(16.dp)) {
+                Column(modifier = Modifier.padding(16.dp).padding(bottom = 8.dp)) {
                     Text(tooltipTitle, color = titleTextColor)
-                    Text(tooltipText, color = bodyTextColor)
                 }
             }
         },
         state = tooltipState
     ) {
+        // Additional content if needed
     }
 }
+
 
 
 class CustomOffsetPositionProvider(
@@ -182,7 +190,10 @@ class CustomOffsetPositionProvider(
         // Calculate the position based on the anchor bounds and offsets
         val x = anchorBounds.left + offsetX
         // Position the tooltip 40% above the y offset
-        val y = anchorBounds.top + offsetY - (popupContentSize.height * 0.7).toInt()
+        val y = anchorBounds.top + offsetY - (popupContentSize.height * abovePercent).toInt()
         return IntOffset(x, y)
     }
 }
+
+
+

@@ -19,7 +19,6 @@ fun ToolsScreen(
     BaseScreen(
         navController = navController,
         selectedIndex = selectedIndex,
-        onItemSelected = onItemSelected,
         overlayContent = {}
 
     ) {

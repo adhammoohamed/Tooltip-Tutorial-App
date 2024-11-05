@@ -18,7 +18,6 @@ fun ProfileScreen(
     BaseScreen(
         navController = navController,
         selectedIndex = selectedIndex,
-        onItemSelected = onItemSelected,
         overlayContent = {}
 
     ) {
