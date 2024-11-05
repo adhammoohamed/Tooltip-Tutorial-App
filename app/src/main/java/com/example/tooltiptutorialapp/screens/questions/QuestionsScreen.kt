@@ -50,6 +50,7 @@ import com.example.tooltiptutorialapp.core.ui.QuestionWritingModel
 import com.example.tooltiptutorialapp.core.ui.QuestionsOralCard
 import com.example.tooltiptutorialapp.core.ui.ScreenHeader
 import com.example.tooltiptutorialapp.core.ui.bottomNavBarGlobalOffsets
+import com.example.tooltiptutorialapp.core.ui.bottomNavBarGlobalSizes
 import com.example.tooltiptutorialapp.ui.theme.SecondColor
 import com.example.tooltiptutorialapp.ui.theme.ThirdColor
 import com.example.tooltiptutorialapp.ui.theme.TransparentSecondColor
@@ -92,8 +93,10 @@ fun QuestionsScreen(
                         onDismiss = {
                             currentOverlay = Overlay.SECOND
                         },
-                        xOffset = bottomNavBarGlobalOffsets[selectedIndex].x,
-                        yOffset = bottomNavBarGlobalOffsets[selectedIndex].y,
+                        xOffset = bottomNavBarGlobalOffsets[2].x,
+                        yOffset = bottomNavBarGlobalOffsets[2].y,
+                        rectWidth = bottomNavBarGlobalSizes[2].width.toFloat(),
+                        rectHeight = bottomNavBarGlobalSizes[2].height.toFloat()
                     )
                 }
 

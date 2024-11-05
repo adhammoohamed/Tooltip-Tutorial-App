@@ -64,10 +64,10 @@ fun ConnectScreen(modifier: Modifier, navController: NavController, selectedInde
                     onDismiss = {
                         showOverLay = false
                     },
-                    xOffset = bottomNavBarGlobalOffsets[selectedIndex].x,
-                    yOffset = bottomNavBarGlobalOffsets[selectedIndex].y,
-                    rectWidth = bottomNavBarGlobalSizes[selectedIndex].width.toFloat(),
-                    rectHeight = bottomNavBarGlobalSizes[selectedIndex].height.toFloat()
+                    xOffset = bottomNavBarGlobalOffsets[1].x,
+                    yOffset = bottomNavBarGlobalOffsets[1].y,
+                    rectWidth = bottomNavBarGlobalSizes[1].width.toFloat(),
+                    rectHeight = bottomNavBarGlobalSizes[1].height.toFloat()
                 )
             }
         }

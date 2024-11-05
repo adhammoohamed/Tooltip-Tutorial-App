@@ -69,10 +69,10 @@ fun HomeScreen(
                     onDismiss = {
                         showTooltipOverLay = false
                     },
-                    xOffset = bottomNavBarGlobalOffsets[selectedIndex].x,
-                    yOffset = bottomNavBarGlobalOffsets[selectedIndex].y,
-                    rectWidth = bottomNavBarGlobalSizes[selectedIndex].width.toFloat(),
-                    rectHeight = bottomNavBarGlobalSizes[selectedIndex].height.toFloat()
+                    xOffset = bottomNavBarGlobalOffsets[0].x,
+                    yOffset = bottomNavBarGlobalOffsets[0].y,
+                    rectWidth = bottomNavBarGlobalSizes[0].width.toFloat(),
+                    rectHeight = bottomNavBarGlobalSizes[0].height.toFloat()
                 )
             }
         }
