@@ -11,8 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.paint
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -25,7 +24,7 @@ fun OnboardingOverlay(onDismiss: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(OnboardingOverlayColor) // Semi-transparent gray color
+            .background(OnboardingOverlayColor.copy(alpha = 0.7f)) // Semi-transparent gray color
             .clickable { onDismiss() } // Dismiss overlay on tap
     ) {
         Column(
@@ -36,7 +35,7 @@ fun OnboardingOverlay(onDismiss: () -> Unit) {
 
             Text(
                 text = "welcome to: how to use and enjoy\nExamate",
-                color = Color.White,
+                color = White,
                 textAlign = TextAlign.Center,
                 fontSize = 18.sp,
             )
@@ -51,3 +50,4 @@ fun OnboardingOverlay(onDismiss: () -> Unit) {
         }
     }
 }
+

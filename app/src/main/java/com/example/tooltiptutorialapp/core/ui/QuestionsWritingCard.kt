@@ -18,10 +18,13 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tooltiptutorialapp.R
@@ -31,12 +34,22 @@ import com.example.tooltiptutorialapp.ui.theme.TransparentSecondColor
 import com.example.tooltiptutorialapp.util.utility_model.WritingModel
 
 @Composable
-fun QuestionWritingModel(model: WritingModel) {
+fun QuestionWritingModel(
+    modifier: Modifier, model: WritingModel, onItemPositioned: (
+        Offset, IntSize
+    ) -> Unit
+) {
 
     Card(
-        modifier = Modifier
+        modifier = modifier
             .height(160.dp)
-            .wrapContentWidth(),
+            .wrapContentWidth()
+            .onGloballyPositioned { layoutCoordinates ->
+                // Capture the position and size of this composable
+                val offset = layoutCoordinates.localToWindow(Offset.Zero)
+                val size = layoutCoordinates.size
+                onItemPositioned(offset, size)
+            },
         shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.elevatedCardElevation(defaultElevation = 5.dp)
@@ -44,29 +57,37 @@ fun QuestionWritingModel(model: WritingModel) {
 
         Column {
             Card(
-                modifier = Modifier.padding(8.dp),
+                modifier = modifier.padding(8.dp),
                 shape = RoundedCornerShape(4.dp),
                 colors = CardDefaults.cardColors(containerColor = TransparentSecondColor)
             ) {
                 Text(
-                    modifier = Modifier.padding(2.dp),
+                    modifier = modifier.padding(2.dp),
                     text = "${model.answeredQuestion} sur 10 Questions",
                     color = Color.Black,
                     fontSize = 10.sp
                 )
             }
 
-            Row(modifier = Modifier.padding(8.dp), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+            Row(
+                modifier = modifier.padding(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
                 Icon(
-                    modifier = Modifier.size(30.dp),
+                    modifier = modifier.size(30.dp),
                     painter = painterResource(R.drawable.ic_airplane),
                     contentDescription = ""
                 )
 
-                Text(text = model.title, fontWeight = FontWeight.Bold, color = ThirdColor, fontSize = 10.sp)
+                Text(
+                    text = model.title,
+                    fontWeight = FontWeight.Bold,
+                    color = ThirdColor,
+                    fontSize = 10.sp
+                )
             }
 
-            Text(modifier = Modifier.padding(8.dp), text = "Progress ${model.progress}%")
+            Text(modifier = modifier.padding(8.dp), text = "Progress ${model.progress}%")
 
             LinearProgressIndicator(
                 modifier = Modifier
@@ -85,11 +106,14 @@ fun QuestionWritingModel(model: WritingModel) {
 fun QuestionWritingModelPreview() {
     Column(modifier = Modifier.fillMaxSize()) {
         QuestionWritingModel(
+            modifier = Modifier,
             model = WritingModel(
                 title = "Technologie",
                 answeredQuestion = 10,
                 progress = 50
             )
-        )
+        ) {
+            offset, size ->
+        }
     }
 }
